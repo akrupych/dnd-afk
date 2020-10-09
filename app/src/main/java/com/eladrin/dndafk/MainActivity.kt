@@ -3,6 +3,8 @@ package com.eladrin.dndafk
 import android.content.Context
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
+import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.postDelayed
@@ -11,95 +13,143 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.character_token.view.*
 import java.util.*
 
-val racenar = Creature(
-    name = "Racenar",
-    imageUrl = "https://www.dndbeyond.com/avatars/10/86/636339381849352911.png",
-    maxHitPoints = 150,
-    armorClass = 15,
-    weapon = Weapon("Greataxe", 5) { d(12) + 3 }
-)
-
-fun generateGoblin() = Creature(
-    name = "Goblin${random(20)}",
+fun generateGoblin(number: Int, isFrontRow: Boolean) = Creature(
+    name = "Goblin$number",
     imageUrl = "https://media-waterdeep.cursecdn.com/avatars/thumbnails/0/351/218/315/636252777818652432.jpeg",
     maxHitPoints = 7,
     armorClass = 15,
-    weapon = Weapon("Scimitar", 4) { d(6) + 2 }
+    weapon = Weapon("Scimitar", 4) { d(6) + 2 },
+    isFrontRow = isFrontRow
 )
+
+val allies = listOf(
+    Creature(
+        name = "TON",
+        imageUrl = "https://www.dndbeyond.com/avatars/9221/828/637202355879380101.jpeg",
+        maxHitPoints = 21,
+        armorClass = 16,
+        weapon = Weapon("Crossbow, Light", 5) { d(8) + 3 },
+        isFrontRow = false
+    ),
+    Creature(
+        name = "Meladrin Elden",
+        imageUrl = "https://www.dndbeyond.com/avatars/11284/327/1581111423-31046859.jpeg",
+        maxHitPoints = 15,
+        armorClass = 12,
+        weapon = Weapon("Fire Bolt", 5) { d(10) },
+        isFrontRow = false
+    ),
+    Creature(
+        name = "Phirina Ophinshtalajiir",
+        imageUrl = "https://www.dndbeyond.com/avatars/9107/482/637196228800489268.jpeg",
+        maxHitPoints = 20,
+        armorClass = 18,
+        weapon = Weapon("Longsword, +1", 6) { d(8) + 4 },
+        isFrontRow = true
+    ),
+)
+
+val enemies = listOf(
+    Creature(
+        name = "Owlbear",
+        imageUrl = "https://media-waterdeep.cursecdn.com/avatars/thumbnails/0/315/256/315/636252772225295187.jpeg",
+        maxHitPoints = 59,
+        armorClass = 13,
+        weapon = Weapon("Beak", 7) { d(10) + 5 },
+        isFrontRow = true
+    ),
+    generateGoblin(1, false),
+    generateGoblin(2, false),
+)
+
+fun allCharacters() = allies.plus(enemies)
 
 class MainActivity : AppCompatActivity() {
 
-    val allies by lazy {
-        mapOf(
-            token1 to racenar
-        )
-    }
+    fun allyBackLine() = listOf(token1, token2, token3, token4)
+    fun allyFrontLine() = listOf(token5, token6, token7, token8)
+    fun allyViews() = allyBackLine().plus(allyFrontLine())
 
-    val enemies by lazy {
-        mapOf(
-            token2 to generateGoblin(),
-            token3 to generateGoblin()
-        )
-    }
+    fun enemyBackLine() = listOf(token9, token10, token11, token12)
+    fun enemyFrontLine() = listOf(token13, token14, token15, token16)
+    fun enemyViews() = enemyBackLine().plus(enemyFrontLine())
 
-    val allEntries: List<Pair<CharacterToken, Creature>>
-    get() = allies.plus(enemies).toList()
+    fun allViews() = allyViews().plus(enemyViews())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        reset()
+        assignCharactersToViews()
         play.setOnClickListener {
             reset()
-            round(1, 2000)
+            round(1, 100)
+        }
+    }
+
+    private fun assignCharactersToViews() {
+        allViews().forEach { it.visibility = View.GONE }
+        allies.forEach { creature ->
+            val line = if (creature.isFrontRow) allyFrontLine() else allyBackLine()
+            line.filter { it.tag == null }[0].apply {
+                bind(creature)
+                tag = creature
+                visibility = View.VISIBLE
+            }
+        }
+        enemies.forEach { creature ->
+            val line = if (creature.isFrontRow) enemyFrontLine() else enemyBackLine()
+            line.filter { it.tag == null }[0].apply {
+                bind(creature)
+                tag = creature
+                visibility = View.VISIBLE
+            }
         }
     }
 
     private fun reset() {
-        allEntries.forEach { (view, creature) ->
+        allCharacters().forEach { creature ->
             creature.reset()
-            view.bind(creature)
-            view.alpha = 1f
+            findCreatureView(creature)?.apply {
+                bind(creature)
+                alpha = 1f
+            }
         }
     }
 
     private fun round(number: Int, roundTime: Long) {
         currentAction.text = "Round $number"
         currentAction.postDelayed(roundTime) {
-//            currentAction.text = racenar.attack(goblin)
-//            allies.forEach { view, ally ->
-//                val enemy = enemies.values.random()
-//                currentAction.text = ally.attack(enemy)
-//            }
-//            token2.bind(goblin)
-//            if (goblin.alive) currentAction.postDelayed(roundTime) {
-//                currentAction.text = goblin.attack(racenar)
-//                token1.bind(racenar)
-//                if (racenar.alive) {
-//                    currentAction.postDelayed(roundTime) { round(number + 1, roundTime) }
-//                }
-//            }
             teamAttack(alliesAlive(), enemiesAlive(), roundTime) {
-                teamAttack(enemiesAlive(), alliesAlive(), roundTime) {
-                    when {
-                        alliesAlive().isEmpty() -> currentAction.text = "Enemies won"
-                        enemiesAlive().isEmpty() -> currentAction.text = "You won"
-                        else -> round(number + 1, roundTime)
+                when {
+                    alliesAlive().isEmpty() -> currentAction.text = "Enemies won"
+                    enemiesAlive().isEmpty() -> currentAction.text = "You won"
+                    else -> teamAttack(enemiesAlive(), alliesAlive(), roundTime) {
+                        when {
+                            alliesAlive().isEmpty() -> currentAction.text = "Enemies won"
+                            enemiesAlive().isEmpty() -> currentAction.text = "You won"
+                            else -> round(number + 1, roundTime)
+                        }
                     }
                 }
             }
         }
     }
 
-    fun alliesAlive() = allies.values.filter { it.alive }.toList()
-    fun enemiesAlive() = enemies.values.filter { it.alive }.toList()
+    fun alliesAlive() = allies.filter { it.alive }.toList()
+    fun enemiesAlive() = enemies.filter { it.alive }.toList()
 
-    private fun teamAttack(team: List<Creature>, opponents: List<Creature>, roundTime: Long, callback: () -> Unit) {
+    private fun teamAttack(
+        team: List<Creature>,
+        opponents: List<Creature>,
+        roundTime: Long,
+        callback: () -> Unit
+    ) {
         if (team.isEmpty() || opponents.isEmpty()) return
         // hero attacks
         val hero = team[0]
         val enemy = opponents.random()
         currentAction.text = hero.attack(enemy)
+        Log.d("qwerty", currentAction.text.toString())
         // update enemy
         val enemyView = findCreatureView(enemy)
         enemyView?.bind(enemy)
@@ -108,10 +158,10 @@ class MainActivity : AppCompatActivity() {
         val remainingOpponents = opponents.filter { it.alive }
         // next calls
         currentAction.postDelayed(roundTime) {
-            if (remainingTeam.isEmpty()) {
+            if (remainingTeam.isEmpty() || remainingOpponents.isEmpty()) {
                 // all team members attacked, return
                 callback()
-            } else if (opponents.isNotEmpty()) {
+            } else {
                 // there are some opponents alive
                 // next team member attacks
                 teamAttack(remainingTeam, remainingOpponents, roundTime, callback)
@@ -119,7 +169,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun findCreatureView(creature: Creature) = allEntries.find { it.second == creature }?.first
+    private fun findCreatureView(creature: Creature) = allViews().find { it.tag == creature }
 }
 
 class CharacterToken @JvmOverloads constructor(
@@ -144,7 +194,8 @@ class Creature(
     val maxHitPoints: Int,
     var hitPoints: Int = maxHitPoints,
     val armorClass: Int,
-    val weapon: Weapon
+    val weapon: Weapon,
+    val isFrontRow: Boolean
 ) {
     val alive: Boolean
         get() = hitPoints > 0
@@ -158,7 +209,7 @@ class Creature(
                 target.hitPoints = 0
                 return "$name damaged $damage and killed ${target.name}"
             }
-            return "$name damaged $damage"
+            return "$name damaged $damage ${target.name}"
         }
         return "$name missed ${target.name}"
     }
@@ -174,8 +225,10 @@ data class Weapon(
     val damage: () -> Int
 )
 
-fun d(die: Int) = random(die) + 1
+fun d(die: Int) = randomInt(die) + 1
 
-fun <T> Collection<T>.random() = toList()[random(size)]
+fun <T> Collection<T>.random() = toList()[randomInt(size)]
 
-fun random(max: Int) = Random().nextInt(max)
+fun randomInt(max: Int) = Random().nextInt(max)
+
+fun randomBoolean() = randomInt(2) == 1

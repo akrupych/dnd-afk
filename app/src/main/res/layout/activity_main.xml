@@ -21,25 +21,145 @@
         android:id="@+id/token1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/currentAction" />
+        app:layout_constraintTop_toBottomOf="@id/currentAction"
+        app:layout_constraintBottom_toTopOf="@id/token2"/>
 
     <com.eladrin.dndafk.CharacterToken
         android:id="@+id/token2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/currentAction" />
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/token1"
+        app:layout_constraintBottom_toTopOf="@id/token3" />
 
     <com.eladrin.dndafk.CharacterToken
         android:id="@+id/token3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/token2"
+        app:layout_constraintBottom_toTopOf="@id/token4" />
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/token3"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toRightOf="@id/token1"
+        app:layout_constraintTop_toBottomOf="@id/currentAction"
+        app:layout_constraintBottom_toTopOf="@id/token6"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toRightOf="@id/token2"
+        app:layout_constraintTop_toBottomOf="@id/token5"
+        app:layout_constraintBottom_toTopOf="@id/token7"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toRightOf="@id/token3"
+        app:layout_constraintTop_toBottomOf="@id/token6"
+        app:layout_constraintBottom_toTopOf="@id/token8"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintLeft_toRightOf="@id/token4"
+        app:layout_constraintTop_toBottomOf="@id/token7"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/token2" />
+        app:layout_constraintTop_toBottomOf="@id/currentAction"
+        app:layout_constraintBottom_toTopOf="@id/token10"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/token9"
+        app:layout_constraintBottom_toTopOf="@id/token11"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/token10"
+        app:layout_constraintBottom_toTopOf="@id/token12"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/token11"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintRight_toLeftOf="@id/token9"
+        app:layout_constraintTop_toBottomOf="@id/currentAction"
+        app:layout_constraintBottom_toTopOf="@id/token14"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintRight_toLeftOf="@id/token10"
+        app:layout_constraintTop_toBottomOf="@id/token13"
+        app:layout_constraintBottom_toTopOf="@id/token15"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintRight_toLeftOf="@id/token11"
+        app:layout_constraintTop_toBottomOf="@id/token14"
+        app:layout_constraintBottom_toTopOf="@id/token16"/>
+
+    <com.eladrin.dndafk.CharacterToken
+        android:id="@+id/token16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintRight_toLeftOf="@id/token12"
+        app:layout_constraintTop_toBottomOf="@id/token15"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/play"

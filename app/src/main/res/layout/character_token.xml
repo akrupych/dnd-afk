@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/token_bg"
-    android:padding="8dp"
-    android:layout_width="100dp"
+    android:padding="4dp"
+    android:layout_width="90dp"
     android:layout_height="wrap_content">
 
     <TextView
@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Racenar"
+        android:text="Name"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="HP: 15/15"
+        android:text="HP"
         app:layout_constraintTop_toBottomOf="@id/image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
